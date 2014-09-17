@@ -53,6 +53,7 @@ public class PhotosActivity extends Activity {
 						InstaLikePhoto photo = new InstaLikePhoto();
 						
 						photo.username = photoJson.getJSONObject("user").getString("username");
+						photo.userProfileImgUrl = photoJson.getJSONObject("user").getString("profile_picture");
 						if(photoJson.getJSONObject("caption") != null){
 							photo.caption = photoJson.getJSONObject("caption").getString("text");
 						}

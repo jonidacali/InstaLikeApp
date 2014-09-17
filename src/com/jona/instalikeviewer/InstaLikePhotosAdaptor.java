@@ -32,9 +32,12 @@ public class InstaLikePhotosAdaptor extends ArrayAdapter<InstaLikePhoto> {
 		
 		TextView tvCaption = (TextView) convertView.findViewById(R.id.tvCaption);
 		ImageView imgPhoto = (ImageView) convertView.findViewById(R.id.imgPhoto);
+		ImageView imgUserProfPhoto = (ImageView) convertView.findViewById(R.id.imgProfile);
+		TextView tvLikes = (TextView) convertView.findViewById(R.id.tvLikes);
 		
 		tvCaption.setText(Html.fromHtml("<b>" + photo.username + "</b> -- " + photo.caption));
-		
+		tvLikes.setText(getContext().getResources().getString(R.string.label_likes) + Integer.toString(photo.likesCount));
+
 		float imgRatio = photo.imgWidth/photo.imgHeight;
 
 		DisplayMetrics metrics = Resources.getSystem().getDisplayMetrics();		
@@ -48,6 +51,7 @@ public class InstaLikePhotosAdaptor extends ArrayAdapter<InstaLikePhoto> {
 		imgPhoto.setImageResource(0);		
 		
 		Picasso.with(getContext()).load(photo.imgUrl).into(imgPhoto);
+		Picasso.with(getContext()).load(photo.userProfileImgUrl).into(imgUserProfPhoto);
 		return convertView;	
 	}
 	
