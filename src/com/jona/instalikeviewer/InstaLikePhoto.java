@@ -8,5 +8,5 @@ public class InstaLikePhoto {
 	public int imgHeight;
 	public int imgWidth;
 	public int likesCount;
-	
+	public long timeCreated;
 }

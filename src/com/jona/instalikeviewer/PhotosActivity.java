@@ -9,6 +9,8 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
@@ -20,12 +22,24 @@ public class PhotosActivity extends Activity {
 	public static final String CLIENT_ID = "0d026667178745719dd60676ed3d065a";
 	private ArrayList<InstaLikePhoto> photos;
 	private InstaLikePhotosAdaptor aPhotos;
+	private SwipeRefreshLayout swipeContainer;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_photos);
+		swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
+		
+		
+		swipeContainer.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+            	fetchPopularPhotos();
+            } 
+        });
 		fetchPopularPhotos();
+
+		swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright, android.R.color.holo_green_light, android.R.color.holo_orange_light, android.R.color.holo_red_light);	
 	}
 
 	private void fetchPopularPhotos() {
@@ -45,6 +59,7 @@ public class PhotosActivity extends Activity {
 			public void onSuccess(int statusCode, Header[] headers,
 					JSONObject response) {
 				JSONArray photosJson = null;
+				swipeContainer.setRefreshing(false);
 				try{
 					photos.clear();
 					photosJson = response.getJSONArray("data");
@@ -57,6 +72,8 @@ public class PhotosActivity extends Activity {
 						if(photoJson.getJSONObject("caption") != null){
 							photo.caption = photoJson.getJSONObject("caption").getString("text");
 						}
+						
+						photo.timeCreated = photoJson.getJSONObject("caption").getLong("created_time");
 						photo.imgUrl = photoJson.getJSONObject("images").getJSONObject("standard_resolution").getString("url");
 						photo.imgHeight= photoJson.getJSONObject("images").getJSONObject("standard_resolution").getInt("height");
 						photo.imgWidth= photoJson.getJSONObject("images").getJSONObject("standard_resolution").getInt("width");
@@ -68,7 +85,6 @@ public class PhotosActivity extends Activity {
 				} catch (JSONException e){
 					e.printStackTrace();
 				}
-				
 			}
 			
 			@Override
@@ -77,8 +93,6 @@ public class PhotosActivity extends Activity {
 				super.onFailure(statusCode, headers, responseString, throwable);
 			}
 		});
-		
-		//
 	}
 
 	@Override

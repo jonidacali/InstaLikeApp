@@ -3,16 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content" >
 
-    <TextView
-        android:id="@+id/tvCaption"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/imgPhoto"
-        android:ellipsize="end"
-        android:maxLines="3"
-        android:text="@string/caption_default_text" />
-
     <ImageView
         android:id="@+id/imgPhoto"
         android:layout_width="150dp"
@@ -39,9 +29,27 @@
         android:id="@+id/tvLikes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/imgProfile"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="14dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/imgPhoto"
         android:text="@string/label_likes" />
+
+    <TextView
+        android:id="@+id/tvCaption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/tvLikes"
+        android:ellipsize="end"
+        android:maxLines="3"
+        android:text="@string/caption_default_text" />
+
+    <TextView
+        android:id="@+id/tvTimeCreated"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="14dp"
+        android:text="@string/label_created" />
 
 </RelativeLayout>
