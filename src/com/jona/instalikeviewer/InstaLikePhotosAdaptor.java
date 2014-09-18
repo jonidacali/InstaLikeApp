@@ -41,18 +41,31 @@ public class InstaLikePhotosAdaptor extends ArrayAdapter<InstaLikePhoto> {
 		ImageView imgUserProfPhoto = (ImageView) convertView.findViewById(R.id.imgProfile);
 		TextView tvLikes = (TextView) convertView.findViewById(R.id.tvLikes);
 		TextView tvCreated = (TextView) convertView.findViewById(R.id.tvTimeCreated);
+		TextView tvComments = (TextView) convertView.findViewById(R.id.tVComments);
+		TextView tvUsername = (TextView) convertView.findViewById(R.id.tvUsername);
 		
-		tvCaption.setText(Html.fromHtml("<b>" + photo.username + "</b> -- " + photo.caption));
-		tvLikes.setText(getContext().getResources().getString(R.string.label_likes) + Integer.toString(photo.likesCount));
+		tvUsername.setText(photo.username);
+		tvCaption.setText(photo.caption);
+		tvLikes.setText(Html.fromHtml("&#9825; " + Integer.toString(photo.likesCount)));
 		tvCreated.setText(DateUtils.getRelativeTimeSpanString(photo.timeCreated*1000, now.getTime(), MIN_IN_MILLIS));
-				
-		float imgRatio = photo.imgWidth/photo.imgHeight;
-
-		DisplayMetrics metrics = Resources.getSystem().getDisplayMetrics();		
-		float scWidth = metrics.widthPixels;
+		String comments = "";
+		int commentsNum = photo.comments.size();
 		
+		if(commentsNum>0){
+			for (int i=0; i<2; i++){
+				comments+= photo.comments.get(i) +"<br/>";
+			}
+			tvComments.setText(Html.fromHtml(comments));
+		} else {
+			tvComments.setVisibility(View.GONE);
+		}		
+		
+		float imgRatio = photo.imgWidth/photo.imgHeight;
+		DisplayMetrics metrics = Resources.getSystem().getDisplayMetrics();		
+		int scWidth = metrics.widthPixels;
+
 		//Set imageView width to 250
-		imgPhoto.getLayoutParams().width =  (int) 250;
+		imgPhoto.getLayoutParams().width = scWidth;
 		imgPhoto.getLayoutParams().height = (int) (250*imgRatio);
 
 		//Clear images that existed in the recycled view

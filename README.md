@@ -1,11 +1,13 @@
 InstaLikeApp
 ============
+Hours: 10 (4 out of which was researching errors)
 
-Instagram-like application (read only)
+Stories
+* Scroll through popular photos
+* Display details: Image, caption, username
+* Additional detail: relative time stamp, like count, user profile image
 
-* Stream Popular Photos
-* display username
-* display userphoto
-* display number of likes
-* display caption (up to three lines)
-* sclae images and user profile images
+Optional Stories
+*Add pull-to-refresh on stream
+* Show latest 2 comments
+* Display photo with same proportions and style as instagram (partially done)

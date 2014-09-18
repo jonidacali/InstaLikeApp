@@ -7,5 +7,8 @@
     <string name="caption_default_text">This is a default caption</string>
     <string name="label_likes">Likes: </string>
     <string name="label_created">Created: </string>
+    <string name="label_comments">Comments </string>
+    <string name="label_username">Username</string>
+    <string name="label_location">Location</string>
     
 </resources>

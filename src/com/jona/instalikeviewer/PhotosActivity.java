@@ -1,6 +1,7 @@
 package com.jona.instalikeviewer;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.http.Header;
 import org.json.JSONArray;
@@ -78,7 +79,12 @@ public class PhotosActivity extends Activity {
 						photo.imgHeight= photoJson.getJSONObject("images").getJSONObject("standard_resolution").getInt("height");
 						photo.imgWidth= photoJson.getJSONObject("images").getJSONObject("standard_resolution").getInt("width");
 						photo.likesCount = photoJson.getJSONObject("likes").getInt("count");
-						
+						JSONArray commentsArray = photoJson.getJSONObject("comments").getJSONArray("data");
+						for (int k = 0; k < commentsArray.length(); k++) {
+							//no need to check for timestamp - the api returns it in chronological order
+							String comment = commentsArray.getJSONObject(k).getString("text");
+							photo.comments.add(comment);
+						}
 						photos.add(photo);
 					}
 					aPhotos.notifyDataSetChanged();
