@@ -40,7 +40,11 @@ public class PhotosActivity extends Activity {
         });
 		fetchPopularPhotos();
 
-		swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright, android.R.color.holo_green_light, android.R.color.holo_orange_light, android.R.color.holo_red_light);	
+		swipeContainer.setColorSchemeResources(
+				android.R.color.holo_blue_bright, 
+				android.R.color.holo_green_light, 
+				android.R.color.holo_orange_light, 
+				android.R.color.holo_red_light);	
 	}
 
 	private void fetchPopularPhotos() {
@@ -49,45 +53,23 @@ public class PhotosActivity extends Activity {
 		ListView lvPhotos = (ListView) findViewById(R.id.lvPhotos);
 		lvPhotos.setAdapter(aPhotos);
 		
-		//Setup endpoint URL
 		String popularUrl = "https://api.instagram.com/v1/media/popular?client_id=" + CLIENT_ID;		
-		//Create net client
 		AsyncHttpClient client = new AsyncHttpClient();
-		//Trigger net request
 		client.get(popularUrl, new JsonHttpResponseHandler(){
 			//define success and failure
 			@Override
 			public void onSuccess(int statusCode, Header[] headers,
 					JSONObject response) {
 				JSONArray photosJson = null;
-				swipeContainer.setRefreshing(false);
+				
+				//swipeContainer.setRefreshing(false);
 				try{
 					photos.clear();
 					photosJson = response.getJSONArray("data");
-					for (int i =0 ; i < photosJson.length(); i++){
-						JSONObject photoJson =  photosJson.getJSONObject(i);
-						InstaLikePhoto photo = new InstaLikePhoto();
-						
-						photo.username = photoJson.getJSONObject("user").getString("username");
-						photo.userProfileImgUrl = photoJson.getJSONObject("user").getString("profile_picture");
-						if(photoJson.getJSONObject("caption") != null){
-							photo.caption = photoJson.getJSONObject("caption").getString("text");
-						}
-						
-						photo.timeCreated = photoJson.getJSONObject("caption").getLong("created_time");
-						photo.imgUrl = photoJson.getJSONObject("images").getJSONObject("standard_resolution").getString("url");
-						photo.imgHeight= photoJson.getJSONObject("images").getJSONObject("standard_resolution").getInt("height");
-						photo.imgWidth= photoJson.getJSONObject("images").getJSONObject("standard_resolution").getInt("width");
-						photo.likesCount = photoJson.getJSONObject("likes").getInt("count");
-						JSONArray commentsArray = photoJson.getJSONObject("comments").getJSONArray("data");
-						for (int k = 0; k < commentsArray.length(); k++) {
-							//no need to check for timestamp - the api returns it in chronological order
-							String comment = commentsArray.getJSONObject(k).getString("text");
-							photo.comments.add(comment);
-						}
-						photos.add(photo);
-					}
+					ArrayList<InstaLikePhoto> newPhotos = InstaLikePhoto.fromJson(photosJson);
+					photos.addAll(newPhotos);
 					aPhotos.notifyDataSetChanged();
+					swipeContainer.setRefreshing(false);
 				} catch (JSONException e){
 					e.printStackTrace();
 				}

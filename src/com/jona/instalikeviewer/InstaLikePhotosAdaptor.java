@@ -15,39 +15,56 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.mikhaellopez.circularimageview.CircularImageView;
 import com.squareup.picasso.Picasso;
 
 public class InstaLikePhotosAdaptor extends ArrayAdapter<InstaLikePhoto> {
-	 public static final long MIN_IN_MILLIS = 60*1000;
-	 public static final long WEEK_IN_MILLIS = 7*24*60*60*1000;
-	 
+	
+	private static class ViewHolder {
+        ImageView ivPhoto;
+        ImageView civProfilePhoto;
+        TextView tvCaption;
+        TextView tvUserName;
+        TextView tvComments;
+        TextView tvTimeCreated;
+        TextView tvLikes;
+    }
+	
 	public InstaLikePhotosAdaptor(Context context, List<InstaLikePhoto> photos) {
 		super(context, android.R.layout.simple_list_item_1, photos);
 	}
-
+	
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		Date now = new Date(System.currentTimeMillis());
 		
 		InstaLikePhoto photo = getItem(position);
 		
+		ViewHolder viewHolder;
+		
 		//Check if using a recycled view
 		if(convertView == null){
+			viewHolder = new ViewHolder();	
 			convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_photo, parent, false);
+			viewHolder.ivPhoto = (ImageView) convertView.findViewById(R.id.imgPhoto);
+			viewHolder.civProfilePhoto = (ImageView) convertView.findViewById(R.id.imgProfile);
+	        viewHolder.tvCaption = (TextView) convertView.findViewById(R.id.tvCaption);
+	        viewHolder.tvUserName = (TextView) convertView.findViewById(R.id.tvUsername);
+	        viewHolder.tvComments = (TextView) convertView.findViewById(R.id.tVComments);
+	        viewHolder.tvTimeCreated = (TextView) convertView.findViewById(R.id.tvTimeCreated);
+	        viewHolder.tvLikes = (TextView) convertView.findViewById(R.id.tvLikes);
+	        convertView.setTag(viewHolder);
+		} else {
+			viewHolder = (ViewHolder) convertView.getTag();
 		}
+				
+		viewHolder.tvUserName.setText(photo.username);
+		viewHolder.tvCaption.setText(photo.caption);
+		viewHolder.tvLikes.setText(Html.fromHtml("&#9825; " + Integer.toString(photo.likesCount)));
 		
-		TextView tvCaption = (TextView) convertView.findViewById(R.id.tvCaption);
-		ImageView imgPhoto = (ImageView) convertView.findViewById(R.id.imgPhoto);
-		ImageView imgUserProfPhoto = (ImageView) convertView.findViewById(R.id.imgProfile);
-		TextView tvLikes = (TextView) convertView.findViewById(R.id.tvLikes);
-		TextView tvCreated = (TextView) convertView.findViewById(R.id.tvTimeCreated);
-		TextView tvComments = (TextView) convertView.findViewById(R.id.tVComments);
-		TextView tvUsername = (TextView) convertView.findViewById(R.id.tvUsername);
+		CharSequence relativeTime = DateUtils.getRelativeTimeSpanString(photo.timeCreated*1000, now.getTime(), DateUtils.MINUTE_IN_MILLIS);
+		viewHolder.tvTimeCreated.setText(relativeTime);
 		
-		tvUsername.setText(photo.username);
-		tvCaption.setText(photo.caption);
-		tvLikes.setText(Html.fromHtml("&#9825; " + Integer.toString(photo.likesCount)));
-		tvCreated.setText(DateUtils.getRelativeTimeSpanString(photo.timeCreated*1000, now.getTime(), MIN_IN_MILLIS));
 		String comments = "";
 		int commentsNum = photo.comments.size();
 		
@@ -55,9 +72,9 @@ public class InstaLikePhotosAdaptor extends ArrayAdapter<InstaLikePhoto> {
 			for (int i=0; i<2; i++){
 				comments+= photo.comments.get(i) +"<br/>";
 			}
-			tvComments.setText(Html.fromHtml(comments));
+			viewHolder.tvComments.setText(Html.fromHtml(comments));
 		} else {
-			tvComments.setVisibility(View.GONE);
+			viewHolder.tvComments.setVisibility(View.GONE);
 		}		
 		
 		float imgRatio = photo.imgWidth/photo.imgHeight;
@@ -65,14 +82,14 @@ public class InstaLikePhotosAdaptor extends ArrayAdapter<InstaLikePhoto> {
 		int scWidth = metrics.widthPixels;
 
 		//Set imageView width to 250
-		imgPhoto.getLayoutParams().width = scWidth;
-		imgPhoto.getLayoutParams().height = (int) (250*imgRatio);
+		viewHolder.ivPhoto.getLayoutParams().width = scWidth;
+		viewHolder.ivPhoto.getLayoutParams().height = (int) (250*imgRatio);
 
 		//Clear images that existed in the recycled view
-		imgPhoto.setImageResource(0);		
+		viewHolder.ivPhoto.setImageResource(0);		
 		
-		Picasso.with(getContext()).load(photo.imgUrl).into(imgPhoto);
-		Picasso.with(getContext()).load(photo.userProfileImgUrl).into(imgUserProfPhoto);
+		Picasso.with(getContext()).load(photo.imgUrl).into(viewHolder.ivPhoto);
+		Picasso.with(getContext()).load(photo.userProfileImgUrl).into(viewHolder.civProfilePhoto);
 				
 		return convertView;	
 	}
