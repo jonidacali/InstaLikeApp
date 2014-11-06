@@ -15,7 +15,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".PhotosActivity"
+            android:name="com.jona.instalikeviewer.activities.PhotosActivity"
             android:label="@string/popular_photos_caption" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
