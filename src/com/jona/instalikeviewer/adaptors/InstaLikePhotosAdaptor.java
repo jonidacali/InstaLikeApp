@@ -95,7 +95,7 @@ public class InstaLikePhotosAdaptor extends ArrayAdapter<InstaLikePhoto> {
 		//Clear images that existed in the recycled view
 		viewHolder.ivPhoto.setImageResource(0);		
 		
-		Picasso.with(getContext()).load(photo.imgUrl).into(viewHolder.ivPhoto);
+		Picasso.with(getContext()).load(photo.imgUrl).placeholder(R.drawable.image_placeholder).into(viewHolder.ivPhoto);
 		Picasso.with(getContext()).load(photo.userProfileImgUrl).into(viewHolder.civProfilePhoto);
 				
 		return convertView;	

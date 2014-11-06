@@ -72,7 +72,7 @@ public class PhotosActivity extends Activity {
 					ArrayList<InstaLikePhoto> newPhotos = InstaLikePhoto.fromJson(photosJson);
 					photos.addAll(newPhotos);
 					aPhotos.notifyDataSetChanged();
-					swipeContainer.setRefreshing(false);
+//					swipeContainer.setRefreshing(false);
 				} catch (JSONException e){
 					e.printStackTrace();
 				}
