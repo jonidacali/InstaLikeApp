@@ -1,5 +1,11 @@
 InstaLikeApp
 ============
+Summary: Build a read-only photo viewer for Instagram which allows a user to check out popular photos. 
+
+Libraries used to complete project: 
+android-async-http
+picasso 
+
 Stories
 * Scroll through popular photos
 * Display details: Image, caption, username
